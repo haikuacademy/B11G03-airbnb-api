@@ -1,4 +1,4 @@
-import { Router } from 'express'
+import Router from 'express'
 const photosRouter = Router()
 
 photosRouter.get('/photos', (req, res) => {

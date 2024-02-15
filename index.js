@@ -2,7 +2,7 @@ import express from 'express'
 
 const app = express()
 
-import photosRouter from './ohotos/photosRoutes.js'
+import photosRouter from './photos/photosRoutes.js'
 
 app.use(photosRouter)
 
