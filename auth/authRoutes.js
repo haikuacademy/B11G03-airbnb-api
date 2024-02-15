@@ -1,16 +1,16 @@
-import Router from 'express'
-const authRouter = Router()
+import express from 'express'
+const router = express.Router()
 
-authRouter.get('/signup', (req, res) => {
+router.get('/signup', (req, res) => {
   res.send('Hello from signup')
 })
 
-authRouter.get('/login', (req, res) => {
+router.get('/login', (req, res) => {
   res.send('Hello from login')
 })
 
-authRouter.get('/logout', (req, res) => {
+router.get('/logout', (req, res) => {
   res.send('Hello from logout')
 })
 
-export default authRouter
+export default router
