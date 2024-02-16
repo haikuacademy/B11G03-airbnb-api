@@ -18,8 +18,9 @@ router.get('/photos/1', async (req, res) => {
     const { rows } = await db.query(
       'SELECT * FROM pictures WHERE picture_id = 1'
     )
-    console.log(rows)
-    res.json(rows)
+    const result = rows[0]
+    console.log(result)
+    res.json(result)
   } catch (err) {
     console.error(err.message)
     res.json(err)
