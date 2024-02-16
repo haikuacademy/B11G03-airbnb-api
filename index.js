@@ -1,24 +1,18 @@
 import express from 'express'
 const app = express()
-const app = express()
 
 import reviewsRoutes from './routes/reviewsRoutes.js'
 import bookingsRoutes from './routes/bookingsRoutes.js'
+import usersRoutes from './routes/usersRoutes.js'
+import photosRoutes from './photos/photosRoutes.js'
+import authRoutes from './auth/authRoutes.js'
+import housesRoutes from './routes/housesRoutes.js'
 
 app.use(reviewsRoutes)
 app.use(bookingsRoutes)
-
-import usersRoutes from './routes/usersRoutes.js'
 app.use(usersRoutes)
-
-import photosRoutes from './photos/photosRoutes.js'
-import authRoutes from './auth/authRoutes.js'
-
 app.use(photosRoutes)
 app.use(authRoutes)
-
-import housesRoutes from './routes/housesRoutes.js'
-
 app.use(housesRoutes)
 
 app.listen(4100, () => {
