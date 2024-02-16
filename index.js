@@ -5,7 +5,7 @@ import reviewsRoutes from './routes/reviewsRoutes.js'
 import bookingsRoutes from './routes/bookingsRoutes.js'
 import usersRoutes from './routes/usersRoutes.js'
 import photosRoutes from './photos/photosRoutes.js'
-import authRoutes from './auth/authRoutes.js'
+import authRoutes from './routes/authRoutes.js'
 import housesRoutes from './routes/housesRoutes.js'
 
 app.use(reviewsRoutes)
