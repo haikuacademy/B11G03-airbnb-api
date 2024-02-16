@@ -21,12 +21,13 @@ router.get('/houses/1', async (req, res) => {
   try {
     const { rows } = await db.query('SELECT * FROM houses WHERE house_id = 1')
     console.log(rows)
-    res.json(rows)
+    const result = rows[0]
+    console.log(result)
+    res.json(result)
   } catch (err) {
     console.error(err.message)
     res.json(err)
   }
 })
-
 // Export the router
 export default router
