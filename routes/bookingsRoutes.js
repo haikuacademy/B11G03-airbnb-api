@@ -3,16 +3,29 @@ const router = Router()
 
 import db from '../db.js'
 
-router.get('/bookings', (req, res) => {
-  res.json([
-    { houseid: 1, userid: 3 },
-    { houseid: 2, userid: 4 },
-    { houseid: 3, userid: 5 }
-  ])
+router.get('/bookings', async (req, res) => {
+  try {
+    const { rows } = await db.query('SELECT * FROM bookings')
+    console.log(rows)
+    res.json(rows)
+  } catch (err) {
+    console.error(err.message)
+    res.json(err)
+  }
 })
 
-router.get('/bookings/1', (req, res) => {
-  res.json({ houseid: 1, userid: 3 })
+router.get('/bookings/1', async (req, res) => {
+  try {
+    const { rows } = await db.query(
+      'SELECT * FROM bookings WHERE booking_id = 1'
+    )
+    const result = rows[0]
+    console.log(result)
+    res.json(result)
+  } catch (err) {
+    console.error(err.message)
+    res.json(err)
+  }
 })
 
 export default router
