@@ -9,7 +9,7 @@ router.get('/reviews', (req, res) => {
   ])
 })
 
-router.json('/reviews/1', (req, res) => {
+router.get('/reviews/1', (req, res) => {
   res.send({ id: 1, rating: 3 })
 })
 

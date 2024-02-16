@@ -1,6 +1,8 @@
 import { Router } from 'express'
 const router = Router()
 
+import db from '../db.js'
+
 router.get('/bookings', (req, res) => {
   res.json([
     { houseid: 1, userid: 3 },
