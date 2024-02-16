@@ -1,15 +1,29 @@
 import express from 'express'
 const router = express.Router()
+import db from '../db.js'
 
-router.get('/photos', (req, res) => {
-  res.send([
-    { id: 1, photourl: 'http://fakephoto.url/1' },
-    { id: 2, photourl: 'http://fakephoto.url/2' }
-  ])
+router.get('/photos', async (req, res) => {
+  try {
+    const { rows } = await db.query('SELECT * FROM pictures') // Note DB table is called pictures not photos
+    console.log(rows)
+    res.json(rows)
+  } catch (err) {
+    console.error(err.message)
+    res.json(err)
+  }
 })
 
-router.get('/photos/1', (req, res) => {
-  res.send({ id: 1, photourl: 'http://fakephoto.url/1' })
+router.get('/photos/1', async (req, res) => {
+  try {
+    const { rows } = await db.query(
+      'SELECT * FROM pictures WHERE picture_id = 1'
+    )
+    console.log(rows)
+    res.json(rows)
+  } catch (err) {
+    console.error(err.message)
+    res.json(err)
+  }
 })
 
 export default router
