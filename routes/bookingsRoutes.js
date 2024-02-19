@@ -14,14 +14,14 @@ router.get('/bookings', async (req, res) => {
   }
 })
 
-router.get('/bookings/1', async (req, res) => {
+router.get('/bookings/:bookingID', async (req, res) => {
   try {
     const { rows } = await db.query(
-      'SELECT * FROM bookings WHERE booking_id = 1'
+      `SELECT * FROM bookings WHERE booking_id = ${req.params.bookingID}`
     )
-    const result = rows[0]
-    console.log(result)
-    res.json(result)
+    const returnObject =
+      rows.length > 0 ? rows[0] : { error: 'booking not found' }
+    res.json(returnObject)
   } catch (err) {
     console.error(err.message)
     res.json(err)
