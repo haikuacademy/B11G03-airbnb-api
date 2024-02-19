@@ -13,13 +13,17 @@ router.get('/photos', async (req, res) => {
   }
 })
 
-router.get('/photos/1', async (req, res) => {
+router.get('/photos/:pictureId', async (req, res) => {
+  let pictureId = req.params.pictureId
   try {
     const { rows } = await db.query(
-      'SELECT * FROM pictures WHERE picture_id = 1'
+      `SELECT * FROM pictures WHERE picture_id = ${pictureId}`
     )
     const result = rows[0]
     console.log(result)
+    if (result === undefined) {
+      res.json({ error: 'picture not found' })
+    }
     res.json(result)
   } catch (err) {
     console.error(err.message)
