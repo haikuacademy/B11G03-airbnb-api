@@ -44,7 +44,6 @@ router.get('/houses', async (req, res) => {
   } else {
     order = req.query.order
   }
-  req.query.order
   console.log(search)
   try {
     const { rows } = await db.query(
