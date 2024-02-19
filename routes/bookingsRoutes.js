@@ -15,7 +15,6 @@ router.get('/bookings', async (req, res) => {
 })
 
 router.get('/bookings/:bookingID', async (req, res) => {
-  let bookingId = req.params.userId
   try {
     const { rows } = await db.query(
       `SELECT * FROM bookings WHERE booking_id = ${req.params.bookingID}`
