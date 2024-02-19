@@ -16,8 +16,9 @@ router.get('/reviews', async (req, res) => {
 router.get('/reviews/1', async (req, res) => {
   try {
     const { rows } = await db.query('SELECT * FROM reviews WHERE review_id = 1')
-    console.log(rows)
-    res.json(rows)
+    const returnObject = rows.length > 0 ? rows[0] : null
+    console.log(returnObject)
+    res.json(returnObject)
   } catch (err) {
     console.error(err.message)
     res.json(err)
