@@ -12,9 +12,6 @@ router.get('/reviews', async (req, res) => {
     const { rows } = await db.query(
       `SELECT * FROM reviews ${house} ORDER BY review_date DESC`
     )
-    const returnObject =
-      rows.length > 0 ? rows[0] : { error: 'house does not exist' }
-    res.json(returnObject)
     console.log(rows)
     res.json(rows)
   } catch (err) {
