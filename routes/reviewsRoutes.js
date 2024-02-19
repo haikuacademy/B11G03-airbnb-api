@@ -3,12 +3,21 @@ const router = Router()
 
 import db from '../db.js'
 
-router.get('/reviews', (req, res) => {
-  res.json([
-    { id: 1, rating: 3 },
-    { id: 2, rating: 4 },
-    { id: 3, rating: 5 }
-  ])
+router.get('/reviews', async (req, res) => {
+  try {
+    let house = ''
+    if (req.query.house) {
+      house = `WHERE house_id = ${req.query.house}`
+    }
+    const { rows } = await db.query(
+      `SELECT * FROM reviews ${house} ORDER BY review_date DESC`
+    )
+    console.log(rows)
+    res.json(rows)
+  } catch (err) {
+    console.error(err.message)
+    res.json({ error: err.message })
+  }
 })
 
 router.get('/reviews/:reviewID', async (req, res) => {
