@@ -16,13 +16,18 @@ router.get('/houses', async (req, res) => {
   }
 })
 
-// Define a GET route for fetching a single house
-router.get('/houses/1', async (req, res) => {
+// Fetching a house using request params
+router.get('/houses/:houseId', async (req, res) => {
+  let houseId = req.params.houseId
   try {
-    const { rows } = await db.query('SELECT * FROM houses WHERE house_id = 1')
-    console.log(rows)
+    const { rows } = await db.query(
+      `SELECT * FROM houses WHERE house_id = ${houseId}`
+    )
     const result = rows[0]
     console.log(result)
+    if (result === undefined) {
+      res.json({ Error: 'House Not Found' })
+    }
     res.json(result)
   } catch (err) {
     console.error(err.message)
