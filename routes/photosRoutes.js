@@ -13,16 +13,13 @@ router.get('/photos', async (req, res) => {
   }
 })
 
-router.get('/photos/:pictureId', async (req, res) => {
-  let pictureId = req.params.pictureId
+router.get('/photos', async (req, res) => {
   try {
-    const { rows } = await db.query(
-      `SELECT * FROM pictures WHERE picture_id = ${pictureId}`
-    )
-    const result = rows[0]
-    console.log(result)
+    const { rows } = await db.query(`SELECT * FROM pictures WHERE house_id = 1`)
+    console.log(req.query)
+    res.json(`${req.query.house}`)
     if (result === undefined) {
-      res.json({ error: 'picture not found' })
+      res.json({ error: 'house parameter is required' })
     }
     res.json(result)
   } catch (err) {
