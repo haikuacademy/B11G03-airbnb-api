@@ -24,6 +24,7 @@ router.get('/photos/:photoId', async (req, res) => {
     if (!result) {
       res.json({ error: 'house parameter is required' })
     }
+    res.json(result)
   } catch (err) {
     console.error(err.message)
     res.json(err)
