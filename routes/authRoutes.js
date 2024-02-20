@@ -3,6 +3,10 @@ const router = express.Router()
 
 import db from '../db.js'
 
+router.get('/signup', (req, res) => {
+  res.send('Hello from signup')
+})
+
 router.post('/login', async (req, res) => {
   const email = req.body.email
   const password = req.body.password
@@ -18,10 +22,6 @@ router.post('/login', async (req, res) => {
     console.error(err.message)
     res.json({ error: err.message })
   }
-})
-
-router.get('/signup', (req, res) => {
-  res.send('Hello from signup')
 })
 
 router.get('/logout', (req, res) => {
