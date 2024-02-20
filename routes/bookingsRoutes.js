@@ -26,7 +26,9 @@ router.get('/bookings/:bookingID', async (req, res) => {
       `SELECT * FROM bookings WHERE booking_id = ${req.params.bookingID}`
     )
     const returnObject =
-      rows.length > 0 ? rows[0] : { error: 'booking not found' }
+      rows.length > 0
+        ? rows[0]
+        : { error: `no booking found with id: ${req.params.bookingID}` }
     res.json(returnObject)
   } catch (err) {
     console.error(err.message)
