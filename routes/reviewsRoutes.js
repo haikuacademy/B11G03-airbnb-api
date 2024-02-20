@@ -5,6 +5,14 @@ import db from '../db.js'
 
 router.get('/reviews', async (req, res) => {
   try {
+    if (req.query.house) {
+      const houseCheck = await db.query(
+        `SELECT 1 FROM houses WHERE house_id = ${req.query.house}`
+      )
+      if (houseCheck.rows.length === 0) {
+        throw new Error('House does not exist.')
+      }
+    }
     let house = ''
     if (req.query.house) {
       house = `WHERE house_id = ${req.query.house}`
@@ -12,6 +20,9 @@ router.get('/reviews', async (req, res) => {
     const { rows } = await db.query(
       `SELECT * FROM reviews ${house} ORDER BY review_date DESC`
     )
+    if (rows.length === 0) {
+      throw new Error('Reviews for this house do not exist.')
+    }
     console.log(rows)
     res.json(rows)
   } catch (err) {
