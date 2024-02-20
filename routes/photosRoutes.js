@@ -14,10 +14,11 @@ router.get('/photos', async (req, res) => {
 })
 
 router.get('/photos', async (req, res) => {
+  let houseId = req.query.house
   try {
-    const { rows } = await db.query(`SELECT * FROM pictures WHERE house_id = 1`)
-    console.log(req.query)
-    res.json(`${req.query.house}`)
+    const housePhotos = photos.filter((photo) => photo.house_id === houseId)
+    console.log(housePhotos)
+    res.json(housePhotos)
     if (result === undefined) {
       res.json({ error: 'house parameter is required' })
     }
