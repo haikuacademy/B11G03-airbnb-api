@@ -5,12 +5,18 @@ import db from '../db.js'
 
 router.get('/reviews', async (req, res) => {
   try {
-    const { rows } = await db.query('SELECT * FROM reviews')
+    let house = ''
+    if (req.query.house) {
+      house = `WHERE house_id = ${req.query.house}`
+    }
+    const { rows } = await db.query(
+      `SELECT * FROM reviews ${house} ORDER BY review_date DESC`
+    )
     console.log(rows)
     res.json(rows)
   } catch (err) {
     console.error(err.message)
-    res.json(err)
+    res.json({ error: err.message })
   }
 })
 
