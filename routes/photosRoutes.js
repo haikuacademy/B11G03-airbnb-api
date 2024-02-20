@@ -16,7 +16,7 @@ router.get('/photos', async (req, res) => {
 router.get('/photos/:photoId', async (req, res) => {
   try {
     const { rows } = await db.query(
-      `SELECT * FROM pictures WHERE house_id = ${req.params.photoId}`
+      `SELECT * FROM pictures WHERE picture_id = ${req.params.photoId}`
     )
     console.log(rows)
     const result = rows[0]
