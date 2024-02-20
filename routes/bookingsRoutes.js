@@ -4,8 +4,14 @@ const router = Router()
 import db from '../db.js'
 
 router.get('/bookings', async (req, res) => {
+  let sort = req.query.sort || 'booking_start_date'
+  let order = req.query.order || 'DESC'
+  let userRangeStart = req.query.user || 0
+  let userRangeEnd = req.query.user || 10000000000
   try {
-    const { rows } = await db.query('SELECT * FROM bookings')
+    const { rows } = await db.query(
+      `SELECT * FROM bookings WHERE user_id BETWEEN ${userRangeStart} AND ${userRangeEnd} ORDER BY ${sort} ${order}`
+    )
     console.log(rows)
     res.json(rows)
   } catch (err) {
