@@ -4,7 +4,7 @@ import db from '../db.js'
 
 router.get('/photos', async (req, res) => {
   try {
-    const { rows } = await db.query('SELECT * FROM pictures') // Note DB table is called pictures not photos
+    const { rows } = await db.query('SELECT * FROM pictures')
     console.log(rows)
     res.json(rows)
   } catch (err) {
@@ -13,16 +13,16 @@ router.get('/photos', async (req, res) => {
   }
 })
 
-router.get('/photos/:pictureId', async (req, res) => {
-  let pictureId = req.params.pictureId
+router.get('/photos/:photoId', async (req, res) => {
   try {
     const { rows } = await db.query(
-      `SELECT * FROM pictures WHERE picture_id = ${pictureId}`
+      `SELECT * FROM pictures WHERE picture_id = ${req.params.photoId}`
     )
+    console.log(rows)
     const result = rows[0]
     console.log(result)
-    if (result === undefined) {
-      res.json({ error: 'picture not found' })
+    if (!result) {
+      res.json({ error: 'photo not found' })
     }
     res.json(result)
   } catch (err) {
