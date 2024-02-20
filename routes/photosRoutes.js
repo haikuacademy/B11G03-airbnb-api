@@ -22,7 +22,7 @@ router.get('/photos/:photoId', async (req, res) => {
     const result = rows[0]
     console.log(result)
     if (!result) {
-      res.json({ error: 'house parameter is required' })
+      res.json({ error: 'photo not found' })
     }
     res.json(result)
   } catch (err) {
