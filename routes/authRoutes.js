@@ -3,12 +3,17 @@ import express from 'express'
 const router = express.Router()
 
 router.post('/signup', async (req, res) => {
-  const insertion = await db.query(`
+  try {
+    const insertion = await db.query(`
     INSERT INTO users (first_name, last_name, email, password, profile_pic_url)
     VALUES ('${req.body.first_name}', '${req.body.last_name}', '${req.body.email}', '${req.body.password}', '${req.body.profile_pic_url}')
     RETURNING *`)
-  console.log(insertion.rows[0])
-  res.json(insertion.rows[0])
+    console.log(insertion.rows[0])
+    res.json(insertion.rows[0])
+  } catch (err) {
+    console.log(err.message)
+    res.send(`Error: ${err.message}`)
+  }
 })
 
 router.get('/login', (req, res) => {
