@@ -16,8 +16,21 @@ router.post('/signup', async (req, res) => {
   }
 })
 
-router.get('/login', (req, res) => {
-  res.send('Hello from login')
+router.post('/login', async (req, res) => {
+  const email = req.body.email
+  const password = req.body.password
+  try {
+    const { rows } = await db.query(`
+      SELECT * FROM users WHERE email = '${email}' AND password = '${password}'
+    `)
+    if (rows.length === 0) {
+      throw new Error('User with that email or password does not exist.')
+    }
+    res.json({ rows })
+  } catch (err) {
+    console.error(err.message)
+    res.json({ error: err.message })
+  }
 })
 
 router.get('/logout', (req, res) => {
