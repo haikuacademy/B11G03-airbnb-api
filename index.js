@@ -1,6 +1,8 @@
 import express from 'express'
 const app = express()
 
+app.use(express.json())
+
 import reviewsRoutes from './routes/reviewsRoutes.js'
 import bookingsRoutes from './routes/bookingsRoutes.js'
 import usersRoutes from './routes/usersRoutes.js'
