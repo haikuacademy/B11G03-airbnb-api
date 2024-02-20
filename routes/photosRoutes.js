@@ -4,7 +4,7 @@ import db from '../db.js'
 
 router.get('/photos', async (req, res) => {
   try {
-    const { rows } = await db.query('SELECT * FROM pictures') // Note DB table is called pictures not photos
+    const { rows } = await db.query('SELECT * FROM pictures')
     console.log(rows)
     res.json(rows)
   } catch (err) {
@@ -13,16 +13,17 @@ router.get('/photos', async (req, res) => {
   }
 })
 
-router.get('/photos', async (req, res) => {
-  let houseId = req.query.house
+router.get('/photos/:photoId', async (req, res) => {
   try {
-    const housePhotos = photos.filter((photo) => photo.house_id === houseId)
-    console.log(housePhotos)
-    res.json(housePhotos)
-    if (result === undefined) {
+    const { rows } = await db.query(
+      `SELECT * FROM pictures WHERE house_id = ${req.params.photoId}`
+    )
+    console.log(rows)
+    const result = rows[0]
+    console.log(result)
+    if (!result) {
       res.json({ error: 'house parameter is required' })
     }
-    res.json(result)
   } catch (err) {
     console.error(err.message)
     res.json(err)
