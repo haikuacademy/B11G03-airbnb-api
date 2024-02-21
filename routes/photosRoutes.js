@@ -16,6 +16,22 @@ router.post('/photos', async (req, res) => {
   }
 })
 
+router.patch('/photos/:picture_id', async (req, res) => {
+  try {
+    const { rows } = await db.query(`
+      UPDATE pictures
+      SET pic_url = '${req.body.pic_url}'
+      WHERE picture_id = ${req.params.picture_id}
+      RETURNING *
+    `)
+    console.log(rows[0])
+    res.send(rows[0])
+  } catch (err) {
+    console.log(err.message)
+    res.send(`Error: ${err.message}`)
+  }
+})
+
 router.get('/photos', async (req, res) => {
   try {
     const { rows } = await db.query('SELECT * FROM pictures')
