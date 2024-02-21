@@ -95,4 +95,24 @@ router.patch('/houses/:houseId', async (req, res) => {
   }
 })
 
+// DELETE
+router.delete('/houses/:houseId', async (req, res) => {
+  let houseId = req.params.houseId
+  try {
+    const readRows = await db.query(
+      `SELECT * FROM houses WHERE house_id = ${houseId}`
+    )
+    const readResult = readRows.rows[0]
+    if (readResult === undefined) {
+      throw new Error(`No house found with ID ${houseId}`)
+    }
+    const deleteRows = await db.query(`
+    DELETE FROM houses WHERE house_id = ${req.params.houseId}
+  `)
+    res.send(`House ID ${houseId} deleted successfully`)
+  } catch (err) {
+    res.send(`Error: ${err.message}`)
+  }
+})
+
 export default router
