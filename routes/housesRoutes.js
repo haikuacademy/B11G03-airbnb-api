@@ -49,7 +49,7 @@ router.post('/houses', async (req, res) => {
   try {
     const insertion =
       await db.query(` INSERT INTO houses (location, bedrooms, bathrooms, description, price_per_night, host_id)
-    VALUES ('${location}', '${bedrooms}', '${bathrooms}', '${description}', '${price_per_night}', '${host_id}')
+    VALUES ('${location}', ${bedrooms}, ${bathrooms}, '${description}', ${price_per_night}, ${host_id})
 RETURNING *`)
     console.log(insertion.rows[0])
     res.json(insertion.rows[0])
