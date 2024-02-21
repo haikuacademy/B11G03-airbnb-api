@@ -63,19 +63,33 @@ router.get('/houses/:houseId', async (req, res) => {
 router.patch('/houses/:houseId', async (req, res) => {
   let houseId = req.params.houseId
   try {
-    const { rows } = await db.query(
+    const readRows = await db.query(
+      `SELECT * FROM houses WHERE house_id = ${houseId}`
+    )
+    const readResult = readRows.rows[0]
+    if (readResult === undefined) {
+      throw new Error(`No house found with ID ${houseId}`)
+    }
+    const readObj = readRows.rows[0]
+    let location = req.body.location || readObj.location
+    let bedrooms = req.body.bedrooms || readObj.bedrooms
+    let bathrooms = req.body.bathrooms || readObj.bathrooms
+    let description = req.body.description || readObj.description
+    let price_per_night = req.body.price_per_night || readObj.price_per_night
+    let host_id = req.body.host_id || readObj.host_id
+    const updateRows = await db.query(
       `UPDATE houses
-    SET location = '${req.body.location}', bedrooms = ${req.body.bedrooms},
-    bathrooms = ${req.body.bathrooms}, description = '${req.body.description}',
-    price_per_night = ${req.body.price_per_night}, host_id = ${req.body.host_id}
+    SET location = '${location}', bedrooms = ${bedrooms},
+    bathrooms = ${bathrooms}, description = '${description}',
+    price_per_night = ${price_per_night}, host_id = ${host_id}
     WHERE house_id = ${req.params.houseId}
     RETURNING *`
     )
-    const result = rows[0]
-    if (result === undefined) {
-      throw new Error(`No house found with ID ${houseId}`)
+    const updateResult = updateRows.rows[0]
+    if (updateResult === undefined) {
+      throw new Error(`Unable to update house ID ${houseId}`)
     }
-    res.json(result)
+    res.json(updateResult)
   } catch (err) {
     res.send(`Error: ${err.message}`)
   }
