@@ -34,7 +34,7 @@ router.get('/bookings/:bookingID', async (req, res) => {
   }
 })
 
-router.post('bookings', async (req, res) => {
+router.post('/bookings', async (req, res) => {
   try {
     const {
       user_id,
