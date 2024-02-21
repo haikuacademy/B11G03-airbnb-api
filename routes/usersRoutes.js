@@ -36,5 +36,23 @@ router.get('/users/:userId', async (req, res) => {
   }
 })
 
+router.patch('/users/:user_id', async (req, res) => {
+  try {
+    const { rows } = await db.query(`
+    UPDATE users
+    SET first_name = '${req.params.first_name}', email = '${req.params.email}'
+    WHERE user_id = ${req.params.user_id}
+    RETURNING *
+  `)
+    console.log(rows)
+    const result = rows[0]
+    console.log(result)
+    res.json(result)
+  } catch (err) {
+    console.log(err.message)
+    res.json(err)
+  }
+})
+
 // Export the router
 export default router
