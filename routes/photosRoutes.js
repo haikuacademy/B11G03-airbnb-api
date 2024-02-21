@@ -16,12 +16,12 @@ router.post('/photos', async (req, res) => {
   }
 })
 
-router.patch('/photos', async (req, res) => {
+router.patch('/photos/:picture_id', async (req, res) => {
   try {
     const { rows } = await db.query(`
       UPDATE pictures
       SET pic_url = '${req.body.pic_url}'
-      WHERE picture_id = ${req.body.picture_id}
+      WHERE picture_id = ${req.params.picture_id}
       RETURNING *
     `)
     console.log(rows[0])
