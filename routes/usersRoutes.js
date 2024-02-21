@@ -40,7 +40,8 @@ router.patch('/users/:user_id', async (req, res) => {
   try {
     const { rows } = await db.query(`
     UPDATE users
-    SET first_name = '${req.params.first_name}', email = '${req.params.email}'
+    SET first_name = '${req.params.first_name}', last_name = '${req.params.last_name}', email = '${req.params.email}',
+     password = '${req.params.password}', profile_pic_url = '${req.params.profile_pic_url}'
     WHERE user_id = ${req.params.user_id}
     RETURNING *
   `)
