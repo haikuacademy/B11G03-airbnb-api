@@ -36,4 +36,26 @@ router.get('/bookings/:bookingID', async (req, res) => {
   }
 })
 
+router.post('/bookings', async (req, res) => {
+  try {
+    const {
+      user_id,
+      house_id,
+      booking_start_date,
+      booking_end_date,
+      price,
+      message_to_host
+    } = req.body
+    const insertion = await db.query(`
+    INSERT INTO bookings (user_id, house_id, booking_start_date, booking_end_date, price, message_to_host)
+    VALUES (${user_id}, ${house_id}, ${booking_start_date}, 
+      ${booking_end_date}, ${price}, '${message_to_host}')
+    RETURNING *`)
+    console.log(insertion.rows[0])
+    res.json(insertion.rows[0])
+  } catch (err) {
+    console.log(err.message)
+    res.json(`Error: ${err.message}`)
+  }
+})
 export default router
