@@ -58,4 +58,21 @@ router.post('/bookings', async (req, res) => {
     res.json(`Error: ${err.message}`)
   }
 })
+
+router.delete('/bookings/:bookingId', async (req, res) => {
+  try {
+    const { rowCount } = await db.query(`
+  DELETE FROM bookings WHERE booking_id = ${req.params.bookingId}
+  `)
+    if (!rowCount) {
+      throw new Error('Booking not found. Delete failed')
+    }
+
+    res.json(rowCount)
+  } catch (err) {
+    console.log(err.message)
+    res.json(`Error: ${err.message}`)
+  }
+})
+
 export default router
