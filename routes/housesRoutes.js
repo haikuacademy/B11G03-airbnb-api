@@ -3,6 +3,28 @@ import db from '../db.js'
 
 const router = Router()
 
+// CREATE
+router.post('/houses', async (req, res) => {
+  const {
+    location,
+    bedrooms,
+    bathrooms,
+    description,
+    price_per_night,
+    host_id
+  } = req.body
+  try {
+    const insertion =
+      await db.query(` INSERT INTO houses (location, bedrooms, bathrooms, description, price_per_night, host_id)
+    VALUES ('${location}', ${bedrooms}, ${bathrooms}, '${description}', ${price_per_night}, ${host_id})
+RETURNING *`)
+    res.json(insertion.rows[0])
+  } catch (err) {
+    res.send(`Error: ${err.message}`)
+  }
+})
+
+// READ (ALL)
 router.get('/houses', async (req, res) => {
   let location = req.query.location || ''
   let max_price = req.query.max_price || 10000000000
@@ -20,6 +42,7 @@ router.get('/houses', async (req, res) => {
   }
 })
 
+// READ (ONE)
 router.get('/houses/:houseId', async (req, res) => {
   let houseId = req.params.houseId
   try {
@@ -32,29 +55,28 @@ router.get('/houses/:houseId', async (req, res) => {
     }
     res.json(result)
   } catch (err) {
-    console.log(err.message)
     res.send(`Error: ${err.message}`)
   }
 })
 
-router.post('/houses', async (req, res) => {
-  const {
-    location,
-    bedrooms,
-    bathrooms,
-    description,
-    price_per_night,
-    host_id
-  } = req.body
+// UPDATE
+router.patch('/houses/:houseId', async (req, res) => {
+  let houseId = req.params.houseId
   try {
-    const insertion =
-      await db.query(` INSERT INTO houses (location, bedrooms, bathrooms, description, price_per_night, host_id)
-    VALUES ('${location}', '${bedrooms}', '${bathrooms}', '${description}', '${price_per_night}', '${host_id}')
-RETURNING *`)
-    console.log(insertion.rows[0])
-    res.json(insertion.rows[0])
+    const { rows } = await db.query(
+      `UPDATE houses
+    SET location = '${req.body.location}', bedrooms = ${req.body.bedrooms},
+    bathrooms = ${req.body.bathrooms}, description = '${req.body.description}',
+    price_per_night = ${req.body.price_per_night}, host_id = ${req.body.host_id}
+    WHERE house_id = ${req.params.houseId}
+    RETURNING *`
+    )
+    const result = rows[0]
+    if (result === undefined) {
+      throw new Error(`No house found with ID ${houseId}`)
+    }
+    res.json(result)
   } catch (err) {
-    console.log(err.message)
     res.send(`Error: ${err.message}`)
   }
 })
