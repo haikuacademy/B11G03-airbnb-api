@@ -67,7 +67,7 @@ router.get('/reviews/:reviewID', async (req, res) => {
 router.delete('/reviews/:review_id', async (req, res) => {
   try {
     const { rowCount } = await db.query(`
-	DELETE FROM reviews WHERE review_id = $req.params.review_id}
+	DELETE FROM reviews WHERE review_id = ${req.params.review_id}
 `)
     if (!rowCount) {
       throw new Error('Review does not exist. Delete failed.')
