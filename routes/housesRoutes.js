@@ -3,6 +3,28 @@ import db from '../db.js'
 
 const router = Router()
 
+// CREATE
+router.post('/houses', async (req, res) => {
+  const {
+    location,
+    bedrooms,
+    bathrooms,
+    description,
+    price_per_night,
+    host_id
+  } = req.body
+  try {
+    const insertion =
+      await db.query(` INSERT INTO houses (location, bedrooms, bathrooms, description, price_per_night, host_id)
+    VALUES ('${location}', ${bedrooms}, ${bathrooms}, '${description}', ${price_per_night}, ${host_id})
+RETURNING *`)
+    res.json(insertion.rows[0])
+  } catch (err) {
+    res.send(`Error: ${err.message}`)
+  }
+})
+
+// READ (ALL)
 router.get('/houses', async (req, res) => {
   let location = req.query.location || ''
   let max_price = req.query.max_price || 10000000000
@@ -20,6 +42,7 @@ router.get('/houses', async (req, res) => {
   }
 })
 
+// READ (ONE)
 router.get('/houses/:houseId', async (req, res) => {
   let houseId = req.params.houseId
   try {
@@ -32,29 +55,42 @@ router.get('/houses/:houseId', async (req, res) => {
     }
     res.json(result)
   } catch (err) {
-    console.log(err.message)
     res.send(`Error: ${err.message}`)
   }
 })
 
-router.post('/houses', async (req, res) => {
-  const {
-    location,
-    bedrooms,
-    bathrooms,
-    description,
-    price_per_night,
-    host_id
-  } = req.body
+// UPDATE
+router.patch('/houses/:houseId', async (req, res) => {
+  let houseId = req.params.houseId
   try {
-    const insertion =
-      await db.query(` INSERT INTO houses (location, bedrooms, bathrooms, description, price_per_night, host_id)
-    VALUES ('${location}', '${bedrooms}', '${bathrooms}', '${description}', '${price_per_night}', '${host_id}')
-RETURNING *`)
-    console.log(insertion.rows[0])
-    res.json(insertion.rows[0])
+    const readRows = await db.query(
+      `SELECT * FROM houses WHERE house_id = ${houseId}`
+    )
+    const readResult = readRows.rows[0]
+    if (readResult === undefined) {
+      throw new Error(`No house found with ID ${houseId}`)
+    }
+    const readObj = readRows.rows[0]
+    let location = req.body.location || readObj.location
+    let bedrooms = req.body.bedrooms || readObj.bedrooms
+    let bathrooms = req.body.bathrooms || readObj.bathrooms
+    let description = req.body.description || readObj.description
+    let price_per_night = req.body.price_per_night || readObj.price_per_night
+    let host_id = req.body.host_id || readObj.host_id
+    const updateRows = await db.query(
+      `UPDATE houses
+    SET location = '${location}', bedrooms = ${bedrooms},
+    bathrooms = ${bathrooms}, description = '${description}',
+    price_per_night = ${price_per_night}, host_id = ${host_id}
+    WHERE house_id = ${req.params.houseId}
+    RETURNING *`
+    )
+    const updateResult = updateRows.rows[0]
+    if (updateResult === undefined) {
+      throw new Error(`Unable to update house ID ${houseId}`)
+    }
+    res.json(updateResult)
   } catch (err) {
-    console.log(err.message)
     res.send(`Error: ${err.message}`)
   }
 })
