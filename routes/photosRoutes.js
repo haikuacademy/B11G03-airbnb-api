@@ -61,4 +61,19 @@ router.get('/photos/:photoId', async (req, res) => {
   }
 })
 
+router.delete('/photos/:picture_id', async (req, res) => {
+  try {
+    const { rowCount } = await db.query(`
+	DELETE FROM photos WHERE picture_id = ${req.params.picture_id}
+`)
+    if (!rowCount) {
+      throw new Error('Photo does not exist. Delete failed.')
+    }
+    res.json(rowCount)
+  } catch (err) {
+    console.log(err)
+    res.json(err.message)
+  }
+})
+
 export default router
