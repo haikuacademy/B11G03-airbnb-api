@@ -23,6 +23,10 @@ router.post('/login', async (req, res) => {
       SELECT * FROM users WHERE email = '${req.body.email}'
     `)
 
+    if (rows.length === 0) {
+      throw new Error('User with that email or password does not exist.')
+    }
+
     let user = rows[0]
 
     const isPasswordValid = await bcrypt.compare(
