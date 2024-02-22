@@ -1,6 +1,7 @@
 // Packages
 import { Router } from 'express'
 import db from '../db.js'
+import bcrypt from 'bcrypt'
 
 const router = Router()
 
@@ -38,6 +39,7 @@ router.get('/users/:userId', async (req, res) => {
 
 router.patch('/users/:user_id', async (req, res) => {
   try {
+    const user_id = req.params.user_id
     const readRows = await db.query(
       `SELECT * FROM users WHERE user_id = ${user_id}`
     )
@@ -49,8 +51,15 @@ router.patch('/users/:user_id', async (req, res) => {
     let first_name = req.body.first_name || readObj.first_name
     let last_name = req.body.bedrooms || readObj.last_name
     let email = req.body.email || readObj.email
-    let password = req.body.password || readObj.password
     let profile_pic_url = req.profile_pic_url || readObj.profile_pic_url
+    let password
+    if (!req.body.password) {
+      password = readObj.password
+    } else {
+      const plaintextPassword = req.body.password
+      const salt = await bcrypt.genSalt(10)
+      password = await bcrypt.hash(plaintextPassword, salt)
+    }
     const updateRows = await db.query(
       `UPDATE users
     SET first_name = '${first_name}', last_name = '${last_name}',
