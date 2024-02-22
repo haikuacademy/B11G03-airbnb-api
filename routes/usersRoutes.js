@@ -38,20 +38,34 @@ router.get('/users/:userId', async (req, res) => {
 
 router.patch('/users/:user_id', async (req, res) => {
   try {
-    const { rows } = await db.query(`
-    UPDATE users
-    SET first_name = '${req.params.first_name}', last_name = '${req.params.last_name}', email = '${req.params.email}',
-     password = '${req.params.password}', profile_pic_url = '${req.params.profile_pic_url}'
+    const readRows = await db.query(
+      `SELECT * FROM users WHERE user_id = ${user_id}`
+    )
+    const readResult = readRows.rows[0]
+    if (readResult === undefined) {
+      throw new Error(`No user found with ID ${user_id}`)
+    }
+    const readObj = readRows.rows[0]
+    let first_name = req.body.first_name || readObj.first_name
+    let last_name = req.body.bedrooms || readObj.last_name
+    let email = req.body.email || readObj.email
+    let password = req.body.password || readObj.password
+    let profile_pic_url = req.profile_pic_url || readObj.profile_pic_url
+    const updateRows = await db.query(
+      `UPDATE users
+    SET first_name = '${first_name}', last_name = '${last_name}',
+    email = '${email}', password = '${password}',
+    profile_pic_url = '${profile_pic_url}'
     WHERE user_id = ${req.params.user_id}
-    RETURNING *
-  `)
-    console.log(rows)
-    const result = rows[0]
-    console.log(result)
-    res.json(result)
+    RETURNING *`
+    )
+    const updateResult = updateRows.rows[0]
+    if (updateResult === undefined) {
+      throw new Error(`Unable to update user ID ${houseId}`)
+    }
+    res.json(updateResult)
   } catch (err) {
-    console.log(err.message)
-    res.json(err)
+    res.send(`Error: ${err.message}`)
   }
 })
 
