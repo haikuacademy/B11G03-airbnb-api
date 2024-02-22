@@ -1,5 +1,6 @@
 import db from '../db.js'
 import express from 'express'
+import bcrypt from 'bcrypt'
 const router = express.Router()
 import bcrypt from 'bcrypt'
 
@@ -26,16 +27,23 @@ router.post('/signup', async (req, res) => {
 })
 
 router.post('/login', async (req, res) => {
-  const email = req.body.email
-  const password = req.body.password
   try {
     const { rows } = await db.query(`
-      SELECT * FROM users WHERE email = '${email}' AND password = '${password}'
+      SELECT * FROM users WHERE email = '${req.body.email}'
     `)
+
     if (rows.length === 0) {
       throw new Error('User with that email or password does not exist.')
     }
-    res.json({ rows })
+
+    let user = rows[0]
+
+    const isPasswordValid = await bcrypt.compare(
+      req.body.password,
+      user.password
+    )
+    console.log(isPasswordValid)
+    res.json(isPasswordValid)
   } catch (err) {
     console.error(err.message)
     res.json({ error: err.message })
