@@ -1,23 +1,22 @@
-// Packages
 import { Router } from 'express'
 import db from '../db.js'
 import bcrypt from 'bcrypt'
 
 const router = Router()
 
-// Define a GET route for fetching the list of users
+// READ (ALL)
 router.get('/users', async (req, res) => {
   try {
     const { rows } = await db.query('SELECT * FROM users')
     console.log(rows)
-    res.json(rows) // respond with data
+    res.json(rows)
   } catch (err) {
     console.error(err.message)
     res.json(err)
   }
 })
 
-// Fetching a user using request params
+// READ (ONE)
 router.get('/users/:userId', async (req, res) => {
   let userId = req.params.userId
   try {
@@ -37,6 +36,7 @@ router.get('/users/:userId', async (req, res) => {
   }
 })
 
+// UPDATE
 router.patch('/users/:user_id', async (req, res) => {
   try {
     const user_id = req.params.user_id
@@ -78,5 +78,4 @@ router.patch('/users/:user_id', async (req, res) => {
   }
 })
 
-// Export the router
 export default router
