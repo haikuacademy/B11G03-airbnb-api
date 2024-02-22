@@ -1,8 +1,9 @@
 import db from '../db.js'
 import express from 'express'
 import bcrypt from 'bcrypt'
+import jwt from 'jsonwebtoken'
+import { jwtSecret } from '../secrets.js'
 const router = express.Router()
-import bcrypt from 'bcrypt'
 
 router.post('/signup', async (req, res) => {
   try {
