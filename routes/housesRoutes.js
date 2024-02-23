@@ -7,15 +7,15 @@ const router = Router()
 
 // CREATE
 router.post('/houses', async (req, res) => {
-  const {
-    location,
-    bedrooms,
-    bathrooms,
-    description,
-    price_per_night,
-    host_id
-  } = req.body
   try {
+    const {
+      location,
+      bedrooms,
+      bathrooms,
+      description,
+      price_per_night,
+      host_id
+    } = req.body
     const insertion =
       await db.query(` INSERT INTO houses (location, bedrooms, bathrooms, description, price_per_night, host_id)
     VALUES ('${location}', ${bedrooms}, ${bathrooms}, '${description}', ${price_per_night}, ${host_id})
