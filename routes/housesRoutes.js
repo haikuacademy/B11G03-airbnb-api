@@ -137,6 +137,9 @@ router.delete('/houses/:houseId', async (req, res) => {
     if (readResult === undefined) {
       throw new Error(`No house found with ID ${houseId}`)
     }
+    if (decodedToken.user_id !== readResult.host_id) {
+      throw new Error('You are not authorized')
+    }
     const deleteRows = await db.query(`
     DELETE FROM houses WHERE house_id = ${req.params.houseId}
   `)
