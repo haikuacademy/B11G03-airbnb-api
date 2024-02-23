@@ -99,12 +99,11 @@ router.patch('/houses/:houseId', async (req, res) => {
     let bathrooms = req.body.bathrooms || readObj.bathrooms
     let description = req.body.description || readObj.description
     let price_per_night = req.body.price_per_night || readObj.price_per_night
-    let host_id = req.body.host_id || readObj.host_id
     const updateRows = await db.query(
       `UPDATE houses
     SET location = '${location}', bedrooms = ${bedrooms},
     bathrooms = ${bathrooms}, description = '${description}',
-    price_per_night = ${price_per_night}, host_id = ${host_id}
+    price_per_night = ${price_per_night}, host_id = ${decodedToken.user_id}
     WHERE house_id = ${req.params.houseId}
     RETURNING *`
     )
