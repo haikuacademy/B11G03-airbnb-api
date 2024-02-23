@@ -19,7 +19,13 @@ router.post('/signup', async (req, res) => {
     INSERT INTO users (first_name, last_name, email, password, profile_pic_url)
     VALUES ('${req.body.first_name}', '${req.body.last_name}', '${req.body.email}', '${hashedPassword}', '${req.body.profile_pic_url}')
     RETURNING *`)
-    console.log(insertion.rows[0])
+    const readNewUser = await db.query(`
+    SELECT * from users WHERE email = '${req.body.email}'`)
+    const newUserId = readNewUser.rows[0].user_id
+    const newUserEmail = readNewUser.rows[0].email
+    const payload = { user_id: newUserId, email: newUserEmail }
+    const token = jwt.sign(payload, jwtSecret)
+    res.cookie('jwt', token)
     res.json(insertion.rows[0])
   } catch (err) {
     console.log(err.message)
