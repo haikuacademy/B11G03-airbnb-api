@@ -1,5 +1,7 @@
 import { Router } from 'express'
 import db from '../db.js'
+import jwt from 'jsonwebtoken'
+import { jwtSecret } from '../secrets.js'
 
 const router = Router()
 
