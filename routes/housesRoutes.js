@@ -121,6 +121,15 @@ router.patch('/houses/:houseId', async (req, res) => {
 router.delete('/houses/:houseId', async (req, res) => {
   let houseId = req.params.houseId
   try {
+    const token = req.cookies.jwt
+    if (!token) {
+      throw new Error('No token provided')
+    } else {
+      const decodedToken = jwt.verify(token, jwtSecret)
+      if (!decodedToken) {
+        throw new Error('Invalid authentication token')
+      }
+    }
     const readRows = await db.query(
       `SELECT * FROM houses WHERE house_id = ${houseId}`
     )
