@@ -91,6 +91,9 @@ router.patch('/houses/:houseId', async (req, res) => {
       throw new Error(`No house found with ID ${houseId}`)
     }
     const readObj = readRows.rows[0]
+    if (decodedToken.user_id !== readObj.host_id) {
+      throw new Error('You are not authorized')
+    }
     let location = req.body.location || readObj.location
     let bedrooms = req.body.bedrooms || readObj.bedrooms
     let bathrooms = req.body.bathrooms || readObj.bathrooms
