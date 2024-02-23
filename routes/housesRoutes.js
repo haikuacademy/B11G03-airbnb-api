@@ -8,6 +8,15 @@ const router = Router()
 // CREATE
 router.post('/houses', async (req, res) => {
   try {
+    const token = req.cookies.jwt
+    if (!token) {
+      throw new Error('No token provided')
+    } else {
+      const decodedToken = jwt.verify(token, jwtSecret)
+      if (!decodedToken) {
+        throw new Error('Invalid authentication token')
+      }
+    }
     const {
       location,
       bedrooms,
