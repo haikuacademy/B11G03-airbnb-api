@@ -22,6 +22,15 @@ router.get('/bookings', async (req, res) => {
 
 router.get('/bookings/:bookingID', async (req, res) => {
   try {
+    const token = req.cookies.jwt
+    if (!token) {
+      throw new Error('No token provided')
+    } else {
+      const decodedToken = jwt.verify(token, jwtSecret)
+      if (!decodedToken) {
+        throw new Error('Invalid authentication token')
+      }
+    }
     const { rows } = await db.query(
       `SELECT * FROM bookings WHERE booking_id = ${req.params.bookingID}`
     )
@@ -38,6 +47,15 @@ router.get('/bookings/:bookingID', async (req, res) => {
 
 router.post('/bookings', async (req, res) => {
   try {
+    const token = req.cookies.jwt
+    if (!token) {
+      throw new Error('No token provided')
+    } else {
+      const decodedToken = jwt.verify(token, jwtSecret)
+      if (!decodedToken) {
+        throw new Error('Invalid authentication token')
+      }
+    }
     const {
       user_id,
       house_id,
@@ -61,6 +79,15 @@ router.post('/bookings', async (req, res) => {
 
 router.delete('/bookings/:bookingId', async (req, res) => {
   try {
+    const token = req.cookies.jwt
+    if (!token) {
+      throw new Error('No token provided')
+    } else {
+      const decodedToken = jwt.verify(token, jwtSecret)
+      if (!decodedToken) {
+        throw new Error('Invalid authentication token')
+      }
+    }
     const { rowCount } = await db.query(`
   DELETE FROM bookings WHERE booking_id = ${req.params.bookingId}
   `)
