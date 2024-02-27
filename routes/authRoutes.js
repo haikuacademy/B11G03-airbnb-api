@@ -49,8 +49,17 @@ router.post('/login', async (req, res) => {
       req.body.password,
       user.password
     )
-    console.log(isPasswordValid)
-    res.json(isPasswordValid)
+    if (isPasswordValid) {
+      const payload = {
+        user_id: '${req.body.user_id}',
+        email: '${req.body.email}'
+      }
+      const token = jwt.sign(payload, jwtSecret)
+      res.cookie('jwt', token)
+      console.log(token)
+      res.json('Logged in.')
+    }
+    throw new Error('Credentials are not valid.')
   } catch (err) {
     console.error(err.message)
     res.json({ error: err.message })
